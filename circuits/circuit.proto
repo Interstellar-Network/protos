@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+import "block.proto"; // for Block
+import "circuit_config.proto";
+
+package interstellarpbcircuits;
+
+message VectConsecutiveEntry {
+  int32 start =
+      1; // ushort could be enough but for size1, but definitely not size2
+  int32 length = 2;
+}
+
+// see msgpack serialization
+// this is 4 vectors of block
+message GarbledTables {
+  repeated Block gt0 = 1;
+  repeated Block gt1 = 2;
+  repeated Block gt2 = 3;
+  repeated Block gt3 = 4;
+}
+
+// This should be as close as possible from the RUNTIME structure
+// = from the class with the same name in the SDK
+message ParallelGarbledCircuit {
+  // uint?
+  int32 n = 1;           // typically: 24
+  int32 m = 2;           // typically: 55440, 29500 for size1
+  int32 q = 3;           // typically: 29957
+  int32 r = 4;           // typically: 30043
+  int32 nonXorCount = 5; // typically 386
+
+  Block globalKey = 6;
+
+  int32 nbLayers = 7;
+
+  repeated int32 layerCount = 8;
+  repeated int32 layerNonXORCount = 9;
+
+  // WARNING: using custom GarbledGates drastically reduce the size of the raw
+  //  PGC buffer BUT is causes the gzip/lzma compressed buffer to
+  //  be BIGGER! (~1-3% bigger)
+  // garbledGates:GarbledGates (required);
+  // garbledGates:[ulong] (required);
+  // GarbledGates3 garbledGates = 10;
+  repeated int64 garbledGates = 10;
+
+  GarbledTables garbleTables = 11;
+
+  repeated Block inputMap = 12;
+
+  // NOTE: no a vector of int !
+  // outputs contains A LOT of consecutive values, so we use this to compress
+  // eg: 55k outputs typically contains 1-2k "unique values", the rest is
+  // consecutive
+  repeated VectConsecutiveEntry outputs = 13;
+
+  CircuitConfig config = 14;
+}

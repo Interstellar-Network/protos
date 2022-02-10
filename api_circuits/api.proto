@@ -1,0 +1,22 @@
+
+syntax = "proto3";
+
+// Interstellar Api Protobuf
+package interstellarpbapicircuits;
+
+option java_multiple_files = true;
+option java_package = "com.interstellar.api_circuits";
+option java_outer_classname = "InterstellarApiProto";
+
+import "api_circuits/circuits_routes.proto";
+
+// Using an independent top-level well_knowns.proto does not work...
+// https://github.com/stepancheg/rust-protobuf/issues/409
+// same as google.protobuf.Empty, but directly included to avoid well-knowns
+// [well-knowns are a pain to use with Android]
+message Empty {}
+
+service CircuitsApi {
+  // Generate a new circuit
+  rpc GenerateCircuit(Empty) returns (CircuitReply) {}
+}

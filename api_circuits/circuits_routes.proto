@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+// Interstellar Api Protobuf
+package interstellarpbapicircuits;
+
+// NOTE: each CircuitPackage is sent compressed and encrypted
+// So CircuitPackage is not "visible" here, only in the code
+message CircuitReply {
+  // TODO IPFS(?) hash etc
+}
