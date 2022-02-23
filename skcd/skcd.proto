@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package interstellarpbskcd;
+
+// cf gate_types.h
+enum SkcdGateType {
+    ZERO = 0;
+    NOR = 1;
+    AANB = 2;
+    INVB = 3;
+    NAAB = 4;
+    INV = 5;
+    XOR = 6;
+    NAND = 7;
+    AND = 8;
+    XNOR = 9;
+    BUF = 10;
+    AONB = 11;
+    BUFB = 12;
+    NAOB = 13;
+    OR = 14;
+    ONE = 15;
+  };
+
+/*
+[BACKEND ONLY]
+It is used to link using "circuit generation" and "garbling".
+
+The fields SHOULD be about the same as the class BlifParser.
+*/
+message Skcd {
+
+    uint32 n = 1;  // inputs number
+    uint32 m = 2;  // outputs number
+    uint32 q = 3;  // gates number
+
+    // Vector of "label index"(except GT)
+    repeated uint32 A = 4;   // gates first inputs
+    repeated uint32 B = 5;   // gates second inputs
+    repeated uint32 GO = 6;  // gates outputs
+    repeated SkcdGateType GT = 7;  // gates types
+    repeated uint32 O = 8;   // outputs
+
+    // Associate a label(as hashed string/string_view) to a index(0-N)
+    // TODO(unordered_map?) replace by array LUT?
+    // std::unordered_map<uint64_t, size_t> labels_map_;
+    // size_t current_label_count_ = 0;
+
+    // TODO? but does it make sense when using an temporary file .skcd?
+    // CircuitData circuit_data_;
+}
