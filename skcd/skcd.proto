@@ -22,6 +22,49 @@ enum SkcdGateType {
     ONE = 15;
   };
 
+enum GateLayer {
+  // All inputs are root(= 'msg' and/or 'rnd' and/or 'z')
+  ROOT = 0;
+  // One input is root, the other is the output from another gate
+  INTERMEDIATE = 1;
+  // All inputs are outputs from another gate
+  // NOTE: this is never the case in pratice, but have this just in case
+  SECOND = 2;
+  // ZERO: currently a special case
+  // no input, only one output: 0
+  // ZERO,
+  // INV: same as ZERO: currently a special case
+  // one input: 'z', one output: 'pix[NNN]'
+  // (only one of those in a circuit)
+  // INV,
+  // DO NOT USE in switch etc;
+  // https://stackoverflow.com/questions/2102582/how-can-i-count-the-items-in-an-enum
+  // GateLayer_MAX = SECOND,
+};
+
+/**
+* INTERNAL/BACKEND ONLY
+* This is an "helper struct" init in BlifParser, and passed around all the way
+* to (Parallel)GarbledCircuit.
+* It allows to avoid various loops on gates/labels to recompute the same
+* things again and again.
+*/
+message CircuitData {
+  uint32 gate_input_min = 1;
+  uint32 gate_input_max = 2;
+  uint32 gate_output_min = 3;
+  uint32 gate_output_max = 4;
+
+  repeated uint32 layer_count = 5;
+
+  // map an 'input gate_id' to a number(of gate that has this input)
+  // After init: input_gate_count.size() = gate_input_max + 1;
+  // NOTE: the inputs are typically init from 0, so this vector is NOT sparse.
+  // ie: typically the "max input0/1" is just a bit bigger than "number of
+  // unique input0/1"
+  repeated uint32 input_gate_count = 6;
+}
+
 /*
 [BACKEND ONLY]
 It is used to link using "circuit generation" and "garbling".
@@ -41,11 +84,5 @@ message Skcd {
     repeated SkcdGateType GT = 7;  // gates types
     repeated uint32 O = 8;   // outputs
 
-    // Associate a label(as hashed string/string_view) to a index(0-N)
-    // TODO(unordered_map?) replace by array LUT?
-    // std::unordered_map<uint64_t, size_t> labels_map_;
-    // size_t current_label_count_ = 0;
-
-    // TODO? but does it make sense when using an temporary file .skcd?
-    // CircuitData circuit_data_;
+    CircuitData circuit_data = 9;
 }
