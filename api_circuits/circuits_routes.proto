@@ -9,5 +9,15 @@ message SkcdDisplayRequest {
 }
 
 message SkcdDisplayReply {
-  string hash = 1;
+  // The circuit is serialized using "message Skcd"
+  string skcd_cid = 1;
+}
+
+message SkcdGenericFromIPFSRequest {
+  string verilog_cid = 1;
+}
+
+message SkcdGenericFromIPFSReply {
+  // The circuit is serialized using "message Skcd"
+  string skcd_cid = 1;
 }

@@ -20,5 +20,6 @@ service SkcdApi {
   // Generate a new circuit (display variant)
   rpc GenerateSkcdDisplay(SkcdDisplayRequest) returns (SkcdDisplayReply) {}
 
-  // TODO add endpoint to generate a new circuit from a generic Verilog (one file or a bundle?)
+  // Generate a new circuit (generic Verilog from IPFS)
+  rpc GenerateSkcdGenericFromIPFS(SkcdGenericFromIPFSRequest) returns (SkcdGenericFromIPFSReply) {}
 }
