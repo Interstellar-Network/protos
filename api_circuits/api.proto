@@ -16,7 +16,10 @@ import "api_circuits/circuits_routes.proto";
 // [well-knowns are a pain to use with Android]
 message Empty {}
 
-service CircuitsApi {
-  // Generate a new circuit
-  rpc GenerateCircuit(Empty) returns (CircuitReply) {}
+service SkcdApi {
+  // Generate a new circuit (display variant)
+  rpc GenerateSkcdDisplay(SkcdDisplayRequest) returns (SkcdDisplayReply) {}
+
+  // Generate a new circuit (generic Verilog from IPFS)
+  rpc GenerateSkcdGenericFromIPFS(SkcdGenericFromIPFSRequest) returns (SkcdGenericFromIPFSReply) {}
 }
