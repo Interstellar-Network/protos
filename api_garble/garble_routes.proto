@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package interstellarpbapigarble;
+
+message GarbleIpfsRequest {
+  string skcd_cid = 1;
+}
+
+message GarbleIpfsReply {
+  string pgarbled_cid = 1;
+}
