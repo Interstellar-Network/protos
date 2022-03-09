@@ -1,10 +1,10 @@
 syntax = "proto3";
 
 import "block.proto"; // for Block
-import "circuit_config.proto";
 
 package interstellarpbcircuits;
 
+// RLE encoding
 message VectConsecutiveEntry {
   int32 start =
       1; // ushort could be enough but for size1, but definitely not size2
@@ -24,18 +24,18 @@ message GarbledTables {
 // = from the class with the same name in the SDK
 message ParallelGarbledCircuit {
   // uint?
-  int32 n = 1;           // typically: 24
-  int32 m = 2;           // typically: 55440, 29500 for size1
-  int32 q = 3;           // typically: 29957
-  int32 r = 4;           // typically: 30043
-  int32 nonXorCount = 5; // typically 386
+  uint32 n = 1;           // typically: 24
+  uint32 m = 2;           // typically: 55440, 29500 for size1
+  uint32 q = 3;           // typically: 29957
+  uint32 r = 4;           // typically: 30043
+  uint32 nbLayers = 5;
+  uint32 nonXorCount = 6; // typically 386
 
-  Block globalKey = 6;
+  repeated uint32 layerCount = 7;
+  repeated uint32 layerNonXORCount = 8;
 
-  int32 nbLayers = 7;
-
-  repeated int32 layerCount = 8;
-  repeated int32 layerNonXORCount = 9;
+  repeated Block input_labels = 9;   // n*2 inputLabels
+  repeated Block output_labels = 10;  // m*2 outputlabels
 
   // WARNING: using custom GarbledGates drastically reduce the size of the raw
   //  PGC buffer BUT is causes the gzip/lzma compressed buffer to
@@ -43,17 +43,17 @@ message ParallelGarbledCircuit {
   // garbledGates:GarbledGates (required);
   // garbledGates:[ulong] (required);
   // GarbledGates3 garbledGates = 10;
-  repeated int64 garbledGates = 10;
+  repeated uint64 garbledGates = 11;
 
-  GarbledTables garbleTables = 11;
-
-  repeated Block inputMap = 12;
+  GarbledTables garbleTables = 12;
 
   // NOTE: no a vector of int !
   // outputs contains A LOT of consecutive values, so we use this to compress
   // eg: 55k outputs typically contains 1-2k "unique values", the rest is
   // consecutive
-  repeated VectConsecutiveEntry outputs = 13;
+  // #ifdef OUTPUTS_ENCODE_NEW
+  // repeated VectConsecutiveEntry outputs = 13;
+  repeated uint32 outputs = 13;
 
-  CircuitConfig config = 14;
+  Block globalKey = 14;
 }
