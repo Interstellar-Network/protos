@@ -85,4 +85,7 @@ message Skcd {
     repeated uint32 O = 8;   // outputs
 
     CircuitData circuit_data = 9;
+
+    map<string, uint32> config = 10;
+
 }
