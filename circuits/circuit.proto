@@ -56,4 +56,6 @@ message ParallelGarbledCircuit {
   repeated uint32 outputs = 13;
 
   Block globalKey = 14;
+
+  map<string, uint32> config = 15;
 }
