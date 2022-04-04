@@ -18,4 +18,8 @@ message Empty {}
 service GarbleApi {
   // Garble a circuit .skcd from IPFS, and store the result in IPFS
   rpc GarbleIpfs(GarbleIpfsRequest) returns (GarbleIpfsReply) {}
+
+  // Garble then Strip a DISPLAY .skcd, and store the result in IPFS
+  // This works ONLY for the "display circuits"
+  rpc GarbleAndStripIpfs(GarbleAndStripIpfsRequest) returns (GarbleAndStripIpfsReply) {}
 }
