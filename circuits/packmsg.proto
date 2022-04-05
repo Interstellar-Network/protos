@@ -1,0 +1,13 @@
+
+
+syntax = "proto3";
+
+import "block.proto"; // for Block
+
+package interstellarpbcircuits;
+
+message Packmsg {
+  repeated Block garbled_values = 1;
+  // NOTE: xormask based on PrePackmsg::xormask; but packed as 64 bool -> 1 int64
+  repeated int64 xormask = 2;
+}
