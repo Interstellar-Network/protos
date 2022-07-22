@@ -6,6 +6,9 @@ package interstellarpbapicircuits;
 message SkcdDisplayRequest {
   uint32 width = 1;
   uint32 height = 2;
+  // MUST match what lib_circuits's interstellar::circuits::GenerateDisplaySkcd expects
+  // It will be converted from Vec<float> -> Vec<tuple<float>> by "generate_skcd_display"
+  repeated float digits_bboxes = 3;
 }
 
 message SkcdDisplayReply {
