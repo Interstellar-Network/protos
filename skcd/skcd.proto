@@ -22,26 +22,6 @@ enum SkcdGateType {
     ONE = 15;
   };
 
-enum GateLayer {
-  // All inputs are root(= 'msg' and/or 'rnd' and/or 'z')
-  ROOT = 0;
-  // One input is root, the other is the output from another gate
-  INTERMEDIATE = 1;
-  // All inputs are outputs from another gate
-  // NOTE: this is never the case in pratice, but have this just in case
-  SECOND = 2;
-  // ZERO: currently a special case
-  // no input, only one output: 0
-  // ZERO,
-  // INV: same as ZERO: currently a special case
-  // one input: 'z', one output: 'pix[NNN]'
-  // (only one of those in a circuit)
-  // INV,
-  // DO NOT USE in switch etc;
-  // https://stackoverflow.com/questions/2102582/how-can-i-count-the-items-in-an-enum
-  // GateLayer_MAX = SECOND,
-};
-
 /**
 * INTERNAL/BACKEND ONLY
 * This is an "helper struct" init in BlifParser, and passed around all the way
@@ -65,6 +45,47 @@ message CircuitData {
   repeated uint32 input_gate_count = 6;
 }
 
+enum GarblerInputsType {
+  GARBLER_INPUTS_BUF = 0;
+  GARBLER_INPUTS_SEVEN_SEGMENTS = 1;
+  GARBLER_INPUTS_WATERMARK = 2;
+};
+
+enum EvaluatorInputsType {
+  EVALUATOR_INPUTS_RND = 0;
+};
+
+message GarblerInputs {
+  GarblerInputsType type = 1;
+  uint32 length = 2;
+}
+
+message EvaluatorInputs {
+  EvaluatorInputsType type = 1;
+  uint32 length = 2;
+}
+
+// Only for display circuits
+// We could alternatively use a map<> for added flexibility but those fields
+// basically never change.
+message DisplayConfig {
+  uint32 width = 20;
+  uint32 height = 21;
+  // cf drawable::DigitSegmentsType
+  uint32 segments_type = 22;
+}
+
+// IMPORTANT it MUST esentially match /lib_circuits/src/blif/skcd_config.h
+message SkcdConfig {
+  // INPUTS
+  // Those are splitted into GARBLER:
+  repeated GarblerInputs garbler_inputs = 1;
+  // Then evaluator
+  repeated EvaluatorInputs evaluator_inputs = 2;
+
+  DisplayConfig display_config = 10;
+}
+
 /*
 [BACKEND ONLY]
 It is used to link using "circuit generation" and "garbling".
@@ -86,6 +107,5 @@ message Skcd {
 
     CircuitData circuit_data = 9;
 
-    map<string, uint32> config = 10;
-
+    SkcdConfig config = 15;
 }
