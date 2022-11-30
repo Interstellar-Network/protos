@@ -93,19 +93,12 @@ It is used to link using "circuit generation" and "garbling".
 The fields SHOULD be about the same as the class BlifParser.
 */
 message Skcd {
-
-    uint32 n = 1;  // inputs number
-    uint32 m = 2;  // outputs number
-    uint32 q = 3;  // gates number
-
     // Vector of "label index"(except GT)
     repeated uint32 A = 4;   // gates first inputs
     repeated uint32 B = 5;   // gates second inputs
     repeated uint32 GO = 6;  // gates outputs
     repeated SkcdGateType GT = 7;  // gates types
     repeated uint32 O = 8;   // outputs
-
-    CircuitData circuit_data = 9;
 
     SkcdConfig config = 15;
 }
