@@ -81,7 +81,11 @@ The fields SHOULD be about the same as the class BlifParser.
 */
 message Skcd {
     repeated SkcdGate gates = 1;
-    repeated string outputs = 8;   // outputs
+    repeated string outputs = 2;   // outputs
+    // TODO NOTE: inputs(and possibly outputs too) COULD be deduced from SkcdConfig and the gates
+    // themselves, but it is easier to map them directly b/c that way we avoid
+    // having to mess converting "gate ID in .blif" with "gate ID in .skcd" and also in skcd_parser.rs
+    repeated string inputs = 3;   // inputs
 
     SkcdConfig config = 15;
 }
