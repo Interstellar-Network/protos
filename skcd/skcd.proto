@@ -22,29 +22,6 @@ enum SkcdGateType {
     ONE = 15;
   };
 
-/**
-* INTERNAL/BACKEND ONLY
-* This is an "helper struct" init in BlifParser, and passed around all the way
-* to (Parallel)GarbledCircuit.
-* It allows to avoid various loops on gates/labels to recompute the same
-* things again and again.
-*/
-message CircuitData {
-  uint32 gate_input_min = 1;
-  uint32 gate_input_max = 2;
-  uint32 gate_output_min = 3;
-  uint32 gate_output_max = 4;
-
-  repeated uint32 layer_count = 5;
-
-  // map an 'input gate_id' to a number(of gate that has this input)
-  // After init: input_gate_count.size() = gate_input_max + 1;
-  // NOTE: the inputs are typically init from 0, so this vector is NOT sparse.
-  // ie: typically the "max input0/1" is just a bit bigger than "number of
-  // unique input0/1"
-  repeated uint32 input_gate_count = 6;
-}
-
 enum GarblerInputsType {
   GARBLER_INPUTS_BUF = 0;
   GARBLER_INPUTS_SEVEN_SEGMENTS = 1;
@@ -86,6 +63,16 @@ message SkcdConfig {
   DisplayConfig display_config = 10;
 }
 
+message SkcdGate {
+  SkcdGateType type = 1;
+  // "a" and "b" are optional
+  // eg a INV gate only has "a", etc
+  string a = 2;
+  string b = 3;
+  // "o" SHOULD always be set
+  string o = 4;
+}
+
 /*
 [BACKEND ONLY]
 It is used to link using "circuit generation" and "garbling".
@@ -93,12 +80,8 @@ It is used to link using "circuit generation" and "garbling".
 The fields SHOULD be about the same as the class BlifParser.
 */
 message Skcd {
-    // Vector of "label index"(except GT)
-    repeated uint32 A = 4;   // gates first inputs
-    repeated uint32 B = 5;   // gates second inputs
-    repeated uint32 GO = 6;  // gates outputs
-    repeated SkcdGateType GT = 7;  // gates types
-    repeated uint32 O = 8;   // outputs
+    repeated SkcdGate gates = 1;
+    repeated string outputs = 8;   // outputs
 
     SkcdConfig config = 15;
 }
