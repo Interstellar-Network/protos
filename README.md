@@ -9,8 +9,10 @@ or use `generated/`
 
 ### generated: Rust
 
-- cd protos
-- install protoc(eg use prebuilt binaries, cf CI)
+- install protoc(eg use prebuilt binaries, cf CI); CHECK: `$PROTOC --version`
 - cargo install protoc-gen-prost
-- protoc -I . --prost_out=generated/rust api_circuits/api.proto api_circuits/circuits_routes.proto
-- protoc -I . --prost_out=generated/rust api_garble/api.proto api_garble/garble_routes.proto
+
+- `cd protos/`
+- `$PROTOC -I . --prost_out=generated/rust api_circuits/api.proto api_circuits/circuits_routes.proto`
+- `$PROTOC -I . --prost_out=generated/rust api_garble/api.proto api_garble/garble_routes.proto`
+- `$PROTOC -I . --prost_out=generated/rust skcd/skcd.proto`
