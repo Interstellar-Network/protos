@@ -22,10 +22,18 @@ enum SkcdGateType {
     ONE = 15;
   };
 
+// https://docs.rs/prost-build/latest/prost_build/struct.Config.html#method.retain_enum_prefix
+// NOTE: careful if using prefix else rust(clippy) will complain:
+// "error: all variants have the same prefix: `GarblerInputs`"
+// But we MUST use a prefix else PROTOC will not compile:
+// "skcd/skcd.proto:26:3: "BUF" is already defined in "interstellarpbskcd".
+// skcd/skcd.proto:26:3: Note that enum values use C++ scoping rules, meaning that enum values are siblings of their type, not children of it.
+// Therefore, "BUF" must be unique within "interstellarpbskcd", not just within "GarblerInputsType"."
+// option retain_enum_prefix = false;
 enum GarblerInputsType {
-  GARBLER_INPUTS_BUF = 0;
-  GARBLER_INPUTS_SEVEN_SEGMENTS = 1;
-  GARBLER_INPUTS_WATERMARK = 2;
+  GARBLER_INPUTS_TYPE_BUF = 0;
+  GARBLER_INPUTS_TYPE_SEVEN_SEGMENTS = 1;
+  GARBLER_INPUTS_TYPE_WATERMARK = 2;
 };
 
 enum EvaluatorInputsType {

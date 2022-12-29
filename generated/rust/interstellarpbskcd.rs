@@ -122,12 +122,20 @@ impl SkcdGateType {
         }
     }
 }
+/// <https://docs.rs/prost-build/latest/prost_build/struct.Config.html#method.retain_enum_prefix>
+/// NOTE: careful if using prefix else rust(clippy) will complain:
+/// "error: all variants have the same prefix: `GarblerInputs`"
+/// But we MUST use a prefix else PROTOC will not compile:
+/// "skcd/skcd.proto:26:3: "BUF" is already defined in "interstellarpbskcd".
+/// skcd/skcd.proto:26:3: Note that enum values use C++ scoping rules, meaning that enum values are siblings of their type, not children of it.
+/// Therefore, "BUF" must be unique within "interstellarpbskcd", not just within "GarblerInputsType"."
+/// option retain_enum_prefix = false;
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum GarblerInputsType {
-    GarblerInputsBuf = 0,
-    GarblerInputsSevenSegments = 1,
-    GarblerInputsWatermark = 2,
+    Buf = 0,
+    SevenSegments = 1,
+    Watermark = 2,
 }
 impl GarblerInputsType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -136,9 +144,9 @@ impl GarblerInputsType {
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            GarblerInputsType::GarblerInputsBuf => "GARBLER_INPUTS_BUF",
-            GarblerInputsType::GarblerInputsSevenSegments => "GARBLER_INPUTS_SEVEN_SEGMENTS",
-            GarblerInputsType::GarblerInputsWatermark => "GARBLER_INPUTS_WATERMARK",
+            GarblerInputsType::Buf => "GARBLER_INPUTS_TYPE_BUF",
+            GarblerInputsType::SevenSegments => "GARBLER_INPUTS_TYPE_SEVEN_SEGMENTS",
+            GarblerInputsType::Watermark => "GARBLER_INPUTS_TYPE_WATERMARK",
         }
     }
 }
