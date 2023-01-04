@@ -9,10 +9,10 @@ or use `generated/`
 
 ### generated: Rust
 
-- install protoc(eg use prebuilt binaries, cf CI); CHECK: `$PROTOC --version`
+- install protoc(eg use prebuilt binaries, cf CI); CHECK: `protoc --version`
 - `cargo install protoc-gen-prost`
 
 - `cd protos/`
-- `$PROTOC -I . --prost_out=generated/rust api_circuits/api.proto api_circuits/circuits_routes.proto`
-- `$PROTOC -I . --prost_out=generated/rust api_garble/api.proto api_garble/garble_routes.proto`
-- `$PROTOC -I . --prost_out=generated/rust --prost_opt=retain_enum_prefix=false skcd/skcd.proto`
+- `protoc -I . --prost_out=generated/rust api_circuits/api.proto api_circuits/circuits_routes.proto`
+- `protoc -I . --prost_out=generated/rust --prost_opt=retain_enum_prefix=false --prost_opt=btree_map="." garbled/garbled.proto`
+- `protoc -I . --prost_out=generated/rust --prost_opt=retain_enum_prefix=false skcd/skcd.proto`
