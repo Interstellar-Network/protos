@@ -31,22 +31,35 @@ enum SkcdGateType {
 // Therefore, "BUF" must be unique within "interstellarpbskcd", not just within "GarblerInputsType"."
 // option retain_enum_prefix = false;
 enum GarblerInputsType {
+  // MUST be set to 0!
   GARBLER_INPUTS_TYPE_BUF = 0;
+  // Part of 7 segments display; so 7 bits
   GARBLER_INPUTS_TYPE_SEVEN_SEGMENTS = 1;
+  // Part of the watermark; typically width*height nb pixels
   GARBLER_INPUTS_TYPE_WATERMARK = 2;
 };
 
 enum EvaluatorInputsType {
-  EVALUATOR_INPUTS_RND = 0;
+  // The "display circuit" standard input type: SHOULD be randomized during each eval loop
+  EVALUATOR_INPUTS_TYPE_RND = 0;
+  // The "generic circuit" standard input type: SHOULD be choosen by the evaluator
+  // eg for the adder circuit
+  EVALUATOR_INPUTS_TYPE_CHOOSEN_BY_EVALUATOR = 1;
+  // Same as previous, but for the garbler
+  EVALUATOR_INPUTS_TYPE_CHOOSEN_BY_GARBLER = 2;
 };
 
 message GarblerInputs {
   GarblerInputsType type = 1;
+  // length in BITS
+  // eg a typical "diplay circuits" with 2 digits will have length = 2 * 7 = 14
+  // and the pinpad length = 10 * 7 = 70
   uint32 length = 2;
 }
 
 message EvaluatorInputs {
   EvaluatorInputsType type = 1;
+  // length in BITS
   uint32 length = 2;
 }
 

@@ -3,6 +3,9 @@
 pub struct GarblerInputs {
     #[prost(enumeration="GarblerInputsType", tag="1")]
     pub r#type: i32,
+    /// length in BITS
+    /// eg a typical "diplay circuits" with 2 digits will have length = 2 * 7 = 14
+    /// and the pinpad length = 10 * 7 = 70
     #[prost(uint32, tag="2")]
     pub length: u32,
 }
@@ -10,6 +13,7 @@ pub struct GarblerInputs {
 pub struct EvaluatorInputs {
     #[prost(enumeration="EvaluatorInputsType", tag="1")]
     pub r#type: i32,
+    /// length in BITS
     #[prost(uint32, tag="2")]
     pub length: u32,
 }
@@ -133,8 +137,11 @@ impl SkcdGateType {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum GarblerInputsType {
+    /// MUST be set to 0!
     Buf = 0,
+    /// Part of 7 segments display; so 7 bits
     SevenSegments = 1,
+    /// Part of the watermark; typically width*height nb pixels
     Watermark = 2,
 }
 impl GarblerInputsType {
@@ -153,7 +160,13 @@ impl GarblerInputsType {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum EvaluatorInputsType {
-    EvaluatorInputsRnd = 0,
+    /// The "display circuit" standard input type: SHOULD be randomized during each eval loop
+    Rnd = 0,
+    /// The "generic circuit" standard input type: SHOULD be choosen by the evaluator
+    /// eg for the adder circuit
+    ChoosenByEvaluator = 1,
+    /// Same as previous, but for the garbler
+    ChoosenByGarbler = 2,
 }
 impl EvaluatorInputsType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -162,7 +175,9 @@ impl EvaluatorInputsType {
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            EvaluatorInputsType::EvaluatorInputsRnd => "EVALUATOR_INPUTS_RND",
+            EvaluatorInputsType::Rnd => "EVALUATOR_INPUTS_TYPE_RND",
+            EvaluatorInputsType::ChoosenByEvaluator => "EVALUATOR_INPUTS_TYPE_CHOOSEN_BY_EVALUATOR",
+            EvaluatorInputsType::ChoosenByGarbler => "EVALUATOR_INPUTS_TYPE_CHOOSEN_BY_GARBLER",
         }
     }
 }
