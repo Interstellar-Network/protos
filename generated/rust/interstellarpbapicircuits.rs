@@ -1,15 +1,4 @@
 // @generated
-/// For now it only serves to pass around what is needed TO "strip+garble"(b/c the "digits" are randomnly generated in ocw-demo)
-/// It SHOULD NOT be sent to the client, it SHOULD be kept server-side!
-///
-/// NOTE: technically we could do without b/c SkcdDisplayRequest is given "digits_bboxes" which
-/// is indeed what is used to set config\["NB_DIGITS"\].
-/// But that is cleaner to do it this way.
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SkcdServerMetadata {
-    #[prost(uint32, tag="1")]
-    pub nb_digits: u32,
-}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SkcdDisplayRequest {
     #[prost(uint32, tag="1")]
@@ -25,8 +14,6 @@ pub struct SkcdDisplayRequest {
 pub struct SkcdDisplayReply {
     #[prost(string, tag="1")]
     pub skcd_cid: ::prost::alloc::string::String,
-    #[prost(message, optional, tag="2")]
-    pub server_metadata: ::core::option::Option<SkcdServerMetadata>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SkcdGenericFromIpfsRequest {
